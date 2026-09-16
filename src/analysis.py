@@ -72,14 +72,11 @@ def classify_suitability_grid(slope_grid, flood_grid, max_slope, max_flood):
             if (slope_grid[row][col] == None
                 or flood_grid[row][col] == None):
                 output_cols.append(None)
-                print(row, " ", col, ": None")
             elif (slope_grid[row][col] <= max_slope
                   and flood_grid[row][col] <= max_flood):
                 output_cols.append(1)
-                print(row, " ", col, ": 1")
             else:
                 output_cols.append(0)
-                print(row, " ", col, ": 0")
         output.append(output_cols)
 
     return output
@@ -106,4 +103,12 @@ def is_valid_grid(slope_grid, flood_grid):
 
 
 def count_suitable_cells(suitability_grid):
-    pass
+    count = 0
+    rows = len(suitability_grid)
+    cols = len(suitability_grid[0])
+    for row in range(rows):
+        for col in range(cols):
+            if not suitability_grid[row][col] == None:
+                count = count + suitability_grid[row][col]
+
+    return count

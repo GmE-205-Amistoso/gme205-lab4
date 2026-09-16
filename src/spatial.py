@@ -114,6 +114,10 @@ class Point(SpatialObject):
 class Parcel(SpatialObject):
     def __init__(self, parcel_id, geometry, attributes: dict):
         super().__init__(geometry)
+
+        if not geometry.is_valid:
+            raise ValueError("Invalid polygon geometry.")
+
         self.parcel_id = parcel_id
         self.attributes = attributes
 
