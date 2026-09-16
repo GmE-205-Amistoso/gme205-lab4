@@ -1,5 +1,3 @@
-from spatial import Parcel
-
 def total_active_area(parcels) -> float:
     total = 0
     for parcel in parcels:
@@ -44,7 +42,7 @@ def is_development_candidate(parcel, min_area, allowed_zones):
         return False
     return True
 
-def intersecting_parcels(parcels, study_area: dict) -> list:
+def intersecting_parcels(parcels, study_area) -> list:
     result = []
     for parcel in parcels:
         if parcel.intersects(study_area):
