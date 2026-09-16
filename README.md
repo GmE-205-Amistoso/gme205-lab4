@@ -70,6 +70,114 @@ python3 -m tests.test_spatial
 │   └── test_spatial.py             # 
 └── requirements.txt                # List of dependencies
 ```
+# Algorithms
+### *1. What is the total area in square meters of all active parcels?*
+```
+PSEUDOCODE
+FUNCTION get_total_active_area(parcels):
+    SET total = 0
+    FOR each parcel in parcels:
+        IF parcel is active:
+            total = total + parcel.area_sqm
+        END IF
+    END FOR
+    RETURN total
+```
+
+### *2. Which parcels have area greater than or equal to a chosen threshold?*
+```
+PSEUDOCODE
+
+FUNCTION get_parcels_above_threshold(parcels, threshold):
+    SET result to empty array
+    FOR each parcel in parcels:
+        IF parcel.area_sqm >= threshold:
+            ADD parcel to result
+        END IF
+    END FOR
+    RETURN result
+```
+
+### *3. How many parcels belong to each zone?*
+```
+PSEUDOCODE
+
+FUNCTION get_count_by_zone(parcels):
+    SET zone_count to empty dictionary
+    FOR each parcel in parcels:
+        SET zone = parcel.zone
+        IF zone NOT IN zone_count:
+            zone_count[zone] = 0
+        END IF
+        zone_count[zone] = zone_count[zone] + 1
+    END FOR
+    RETURN zone_count
+
+```
+
+### *4. Which parcels are development candidates under this rule: active, zone is Residential or Commercial, and area is at least 5,000 m²?*
+```
+PSEUDOCODE
+
+FUNCTION get_development_candidates(parcels):
+    SET result to empty array
+    FOR each parcel in parcels:
+        IF parcel is active
+            AND (parcel.zone is "Residential" OR parcel.zone is "Commercial")
+            AND parcel.area_sqm >= 5000:
+
+            ADD parcel to result
+        END IF
+    END FOR
+    RETURN result
+
+```
+
+### *5. Which parcels intersect a defined study-area polygon?*
+```
+PSEUDOCODE
+
+FUNCTION get_intersecting_parcels(parcels, study_area):
+    SET result to empty array
+    FOR each parcel in parcels:
+        IF parcel INTERSECTS with study_area:
+            ADD parcel to result
+        END IF
+    END FOR
+    RETURN result
+```
+
+### *6. Using a small raster-style grid, which cells satisfy both slope and flood criteria?*
+```
+PSEUDOCODE
+
+FUNCTION get_raster_suitability(suitability_grid):
+    SET output as empty array
+    # Assumption here is that slope_deg and flood_m have the same dimensions
+    SET rows to suitability_grid["slope_deg"] row count
+    SET cols to suitability_grid["slope_deg"] column count
+
+    FOR each row in range(rows):
+        SET output_cols as empty array
+        FOR each col in range(cols):
+            IF suitability_grid["slope_deg"][row][col] is null
+                OR suitability_grid["flood_m"][row][col] is null:
+                ADD null to output_cols
+                CONTINUE
+            END IF
+
+            IF suitability_grid["slope_deg"][row][col] <= suitability_grid["criteria"]["max_slope_deg"]
+                AND suitability_grid["flood_m"][row][col] <= suitability_grid["criteria"]["max_flood_m"]:
+                ADD 1 to output_cols
+            ELSE
+                ADD 0 to output_cols
+            END IF
+        END FOR
+        ADD output_cols to output
+    END FOR
+
+    RETURN output
+```
 
 # Reflections
 
