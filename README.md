@@ -119,17 +119,26 @@ FUNCTION count_by_zone(parcels):
 ```
 PSEUDOCODE
 
-FUNCTION development_candidates(parcels):
+FUNCTION development_candidates(parcels, min_area, allowed_zones):
     SET result to empty array
     FOR each parcel in parcels:
-        IF parcel is active
-            AND (parcel.zone is "Residential" OR parcel.zone is "Commercial")
-            AND parcel.area_sqm >= 5000:
-
+        IF is_development_candidate(parcel, min_area, allowed_zones):
             ADD parcel to result
         END IF
     END FOR
     RETURN result
+
+FUNCTION is_development_candidate(parcel, min_area, allowed_zones):
+    IF NOT parcel is active:
+        RETURN False
+    END IF
+    IF parcel.zone NOT IN allowed_zones:
+        RETURN False
+    END IF
+    IF parcel.area_sqm < min_area:
+        RETURN False
+    END IF
+    RETURN True
 
 ```
 
