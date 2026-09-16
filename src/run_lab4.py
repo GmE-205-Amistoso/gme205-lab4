@@ -4,7 +4,7 @@ from analysis import development_candidates, intersecting_parcels
 
 import json
 
-DATA_PATH = "data/parcels_shapely_ready.json"
+VECTOR_DATA_PATH = "data/parcels_shapely_ready.json"
 MIN_AREA = 5000.0
 ALLOWED_ZONES = {"Residential", "Commercial"}
 

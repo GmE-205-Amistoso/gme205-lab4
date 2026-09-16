@@ -89,7 +89,7 @@ FUNCTION total_active_area(parcels):
 PSEUDOCODE
 
 FUNCTION parcels_above_threshold(parcels, threshold):
-    SET result to empty array
+    SET result to empty list
     FOR each parcel in parcels:
         IF parcel.area_sqm >= threshold:
             ADD parcel to result
@@ -120,7 +120,7 @@ FUNCTION count_by_zone(parcels):
 PSEUDOCODE
 
 FUNCTION development_candidates(parcels, min_area, allowed_zones):
-    SET result to empty array
+    SET result to empty list
     FOR each parcel in parcels:
         IF is_development_candidate(parcel, min_area, allowed_zones):
             ADD parcel to result
@@ -147,7 +147,7 @@ FUNCTION is_development_candidate(parcel, min_area, allowed_zones):
 PSEUDOCODE
 
 FUNCTION intersecting_parcels(parcels, study_area):
-    SET result to empty array
+    SET result to empty list
     FOR each parcel in parcels:
         IF parcel INTERSECTS with study_area:
             ADD parcel to result
@@ -160,23 +160,22 @@ FUNCTION intersecting_parcels(parcels, study_area):
 ```
 PSEUDOCODE
 
-FUNCTION get_raster_suitability(suitability_grid):
-    SET output as empty array
-    # Assumption here is that slope_deg and flood_m have the same dimensions
-    SET rows to suitability_grid["slope_deg"] row count
-    SET cols to suitability_grid["slope_deg"] column count
+FUNCTION classify_suitability_grid(slope_grid, flood_grid, max_slope, max_flood):
+    IF NOT is_valid_grid(slope_grid, flood_grid):
+        RETURN an empty list
+
+    SET output as empty list
+    SET rows to slope_grid length of slope_grid
+    SET cols to slope_grid length of first row of slope_grid
 
     FOR each row in range(rows):
         SET output_cols as empty array
         FOR each col in range(cols):
-            IF suitability_grid["slope_deg"][row][col] is null
-                OR suitability_grid["flood_m"][row][col] is null:
-                ADD null to output_cols
-                CONTINUE
-            END IF
-
-            IF suitability_grid["slope_deg"][row][col] <= suitability_grid["criteria"]["max_slope_deg"]
-                AND suitability_grid["flood_m"][row][col] <= suitability_grid["criteria"]["max_flood_m"]:
+            IF slope_grid[row][col] is None
+                OR slope_grid[row][col] is None:
+                ADD None to output_cols
+            ELSE IF slope_grid[row][col] <= max_slope
+                AND slope_grid[row][col] <= max_flood:
                 ADD 1 to output_cols
             ELSE
                 ADD 0 to output_cols
@@ -186,6 +185,28 @@ FUNCTION get_raster_suitability(suitability_grid):
     END FOR
 
     RETURN output
+
+FUNCTION is_valid_grid(slope_grid, flood_grid):
+    SET slope_rows as length of slope_grid
+    SET slope_cols as length of first row of slope_grid if slope_rows > 0, otherwise set it as 0
+
+    IF slope_rows == 0 AND slope_cols == 0:
+        RETURN False
+    END IF
+
+    SET flood_rows as length of flood_grid
+    SET flood_cols as length of first row of flood_grid if flood_rows > 0, otherwise set it as 0
+
+    IF flood_rows == 0 AND flood_cols == 0:
+        RETURN False
+    END IF
+
+    IF NOT (slope_rows == flood_rows OR slope_cols == flood_cols):
+        RETURN False
+    END IF
+
+    RETURN True
+
 ```
 
 # Reflections

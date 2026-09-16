@@ -2,25 +2,21 @@ from spatial import Parcel
 from analysis import *
 import json
 
-DATA_PATH = "data/parcels_shapely_ready.json"
+PARCEL_DATA_PATH = "data/parcels_shapely_ready.json"
+GRID_DATA_PATH = "data/suitability_grid.json"
 
-with open(DATA_PATH, 'r', encoding='utf-8') as file:
+# with open(PARCEL_DATA_PATH, 'r', encoding='utf-8') as file:
+#     data = json.load(file)
+
+# parcels = [Parcel.from_dict(d) for d in data]
+
+with open(GRID_DATA_PATH, 'r', encoding='utf-8') as file:
     data = json.load(file)
 
-# parcels = Parcel.from_dict(data[0])
-# print(parcels.area_sqm)
+slope_grid = data["slope_deg"]
+flood_grid = data["flood_m"]
+criteria = data["criteria"]
+max_slope = criteria["max_slope_deg"]
+max_flood = criteria["max_flood_m"]
 
-parcels = []
-for d in data:
-    parcels.append(Parcel.from_dict(d))
-
-print("total_active_area test:")
-print(total_active_area(parcels))
-print("\n\nparcels_above_threshold test:")
-print(parcels_above_threshold(parcels, 15000))
-print("\n\ncount_by_zone test:")
-print(count_by_zone(parcels))
-print("\n\ndevelopment_candidates test:")
-print(development_candidates(parcels, 15000, ["Residential", "Commercial"]))
-print("\n\nintersecting_parcels test:")
-print(intersecting_parcels(parcels, parcels[0]))
+print(classify_suitability_grid(slope_grid, flood_grid, max_slope, max_flood))
