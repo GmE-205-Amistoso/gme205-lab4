@@ -74,7 +74,7 @@ python3 -m tests.test_spatial
 ### *1. What is the total area in square meters of all active parcels?*
 ```
 PSEUDOCODE
-FUNCTION get_total_active_area(parcels):
+FUNCTION total_active_area(parcels):
     SET total = 0
     FOR each parcel in parcels:
         IF parcel is active:
@@ -88,7 +88,7 @@ FUNCTION get_total_active_area(parcels):
 ```
 PSEUDOCODE
 
-FUNCTION get_parcels_above_threshold(parcels, threshold):
+FUNCTION parcels_above_threshold(parcels, threshold):
     SET result to empty array
     FOR each parcel in parcels:
         IF parcel.area_sqm >= threshold:
@@ -102,7 +102,7 @@ FUNCTION get_parcels_above_threshold(parcels, threshold):
 ```
 PSEUDOCODE
 
-FUNCTION get_count_by_zone(parcels):
+FUNCTION count_by_zone(parcels):
     SET zone_count to empty dictionary
     FOR each parcel in parcels:
         SET zone = parcel.zone
@@ -119,7 +119,7 @@ FUNCTION get_count_by_zone(parcels):
 ```
 PSEUDOCODE
 
-FUNCTION get_development_candidates(parcels):
+FUNCTION development_candidates(parcels):
     SET result to empty array
     FOR each parcel in parcels:
         IF parcel is active
@@ -137,7 +137,7 @@ FUNCTION get_development_candidates(parcels):
 ```
 PSEUDOCODE
 
-FUNCTION get_intersecting_parcels(parcels, study_area):
+FUNCTION intersecting_parcels(parcels, study_area):
     SET result to empty array
     FOR each parcel in parcels:
         IF parcel INTERSECTS with study_area:
