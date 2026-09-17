@@ -29,11 +29,11 @@ def main():
         parcels.append(p)
 
     # Define analysis parameters
-        MIN_AREA = 5000.0
-        ALLOWED_ZONES = {"Residential", "Commercial"}
-        study_area = SpatialObject(
-            box(121.050, 14.648, 121.060, 14.658)
-        )
+    MIN_AREA = 5000.0
+    ALLOWED_ZONES = {"Residential", "Commercial"}
+    study_area = SpatialObject(
+        box(121.050, 14.648, 121.060, 14.658)
+    )
 
     # Vector analyses
     print("Computing parcel count...")
@@ -44,7 +44,7 @@ def main():
     zone_counts = count_by_zone(parcels)
     print("Getting parcels above threshold...")
     above_threshold = parcels_above_threshold(parcels, MIN_AREA)
-    above_threshold_ids = [p.parcel_id for p in above_threshold]
+    above_threshold_ids = [p.parcel_id for p in  above_threshold]
     print("Getting candidate parcels...")
     candidates = development_candidates(
         parcels,
@@ -70,10 +70,13 @@ def main():
     max_flood = criteria["max_flood_m"]
 
     print("Analyzing suitability...")
-    suitability_grid = classify_suitability_grid(slope_grid, flood_grid, max_slope, max_flood)
-    rows = len(suitability_grid)
-    cols = len(suitability_grid[0])
-    suitable_cell_count = count_suitable_cells(suitability_grid)
+    try:
+        suitability_grid = classify_suitability_grid(slope_grid, flood_grid, max_slope, max_flood)
+        rows = len(suitability_grid)
+        cols = len(suitability_grid[0])
+        suitable_cell_count = count_suitable_cells(suitability_grid)
+    except(ValueError, KeyError, TypeError) as exc:
+        print(f"Ending raster suitability. Encountered exception: {exc}")
 
     # Construct dictionaries
     print("Building dictionaries...")
@@ -123,14 +126,13 @@ def main():
     # Visualize suitability_grid
     print("Generating suitability grid plot...")
     fig, ax = plt.subplots(figsize=(5, 5))
-    # Use a masked array so NaN cells render distinctly (e.g. as gray)
+    # Used a masked array so NaN cells will render distinctly
     masked_grid = np.ma.masked_invalid(grid)
     cmap = plt.cm.Blues
-    cmap.set_bad(color="lightgray")  # color for null/NaN cells
+    cmap.set_bad(color="lightgray")
 
     im = ax.imshow(masked_grid, cmap=cmap)
 
-    # Annotate each cell with its value
     rows, cols = grid.shape
     for r in range(rows):
         for c in range(cols):
@@ -143,6 +145,20 @@ def main():
     ax.set_yticks(range(rows))
     plt.savefig(OUTPUT_DIR+"/lab4_raster_preview.png", dpi=300, bbox_inches="tight")
     plt.close()
+
+    # For Challenge 1 in Part J
+    NEW_MIN_AREA = 10000.0
+    NEW_ALLOWED_ZONES = {"Industrial", "Commercial"}
+    new_candidates = development_candidates(
+        parcels,
+        min_area=NEW_MIN_AREA,
+        allowed_zones=NEW_ALLOWED_ZONES
+    )
+    new_candidates_id = [p.parcel_id for p in new_candidates]
+
+    print(candidate_ids)
+    print(new_candidates_id)
+
 
 if __name__ == "__main__":
     main()

@@ -60,7 +60,7 @@ def intersecting_parcels(parcels, study_area) -> list:
 
 def classify_suitability_grid(slope_grid, flood_grid, max_slope, max_flood):
     if not is_valid_grid(slope_grid, flood_grid):
-        return []
+        raise ValueError("slope_grid and flood_grid dimensions do not match.")
 
     output = []
     rows = len(slope_grid)
@@ -69,8 +69,8 @@ def classify_suitability_grid(slope_grid, flood_grid, max_slope, max_flood):
     for row in range(rows):
         output_cols = []
         for col in range(cols):
-            if (slope_grid[row][col] == None
-                or flood_grid[row][col] == None):
+            if (slope_grid[row][col] is None
+                or flood_grid[row][col] is None):
                 output_cols.append(None)
             elif (slope_grid[row][col] <= max_slope
                   and flood_grid[row][col] <= max_flood):
@@ -96,7 +96,7 @@ def is_valid_grid(slope_grid, flood_grid):
         return False
 
     # Check if no of rows and cols are the same
-    if not (slope_rows == flood_rows or slope_cols == flood_cols):
+    if not (slope_rows == flood_rows and slope_cols == flood_cols):
         return False
 
     return True
@@ -108,7 +108,7 @@ def count_suitable_cells(suitability_grid):
     cols = len(suitability_grid[0])
     for row in range(rows):
         for col in range(cols):
-            if not suitability_grid[row][col] == None:
+            if suitability_grid[row][col] is not None:
                 count = count + suitability_grid[row][col]
 
     return count
