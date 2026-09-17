@@ -54,20 +54,20 @@ python3 -m tests.test_spatial
 # Directory Structure
 ```
 ├── data                            # Data files
-│   ├── parcels_shapely_ready.json  # 
-│   └── suitability_grid.json       # 
+│   ├── parcels_shapely_ready.json  # Sample shapely-ready data
+│   └── suitability_grid.json       # Sample raster suitability analysis data
 ├── output                          # Output files
-│   ├── lab4_raster_preview.png     # 
-│   ├── lab4_report.json            # 
-│   └── lab4_vector_preview.png     # 
+│   ├── lab4_raster_preview.png     # Preview of suitability grid output from runner script
+│   ├── lab4_report.json            # Summary dictionary output from runner script
+│   └── lab4_vector_preview.png     # Preview of parcel outputs from runner script
 ├── src                             # Source files
 │   ├── analysis.py                 # Code containing structured analysis functions
 │   ├── demo.py                     # Code for incremental checks
 │   ├── run_lab4.py                 # Runner script
 │   └── spatial.py                  # Main logic
 ├── test                            # Verification codes
-│   ├── test_analysis               # 
-│   └── test_spatial.py             # 
+│   ├── test_analysis.py            # Targeted tests for analysis.py
+│   └── test_spatial.py             # Targeted tests for spatial.py
 └── requirements.txt                # List of dependencies
 ```
 # Algorithms
